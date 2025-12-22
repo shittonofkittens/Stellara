@@ -1,0 +1,15 @@
+:root {
+  --bg: #111217;
+  --bg-elevated: #181b22;
+  --bg-elevated-soft: #1e222b;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --text-main: #f7f7ff;
+  --text-muted: #a0a4b8;
+
+  --accent-air: #f5f5f8;
+  --accent-earth: #9fcf70;
+  --accent-fire: #ff9566;
+  --accent-water: #9ac3f1;
+
+  --star-token: rgba(220, 224, 238, 1);
+}

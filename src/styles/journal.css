@@ -1,0 +1,320 @@
+/* Journal Input */
+
+.journal-input-row {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.journal-field {
+  flex: 1;
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.journal-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.journal-input-text,
+.journal-select,
+.journal-textarea {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(5, 6, 10, 0.85);
+  color: var(--text-main);
+  padding: 0.45rem 0.55rem;
+  font-size: 0.70rem;
+  resize: vertical;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  outline: none;
+}
+
+.journal-input-text:focus,
+.journal-select:focus,
+.journal-textarea:focus,
+.journal-button-primary:focus,
+.subcategory-tab.is-active {
+  outline: none;
+  border-color: var(--theme-glow);
+  box-shadow: 0 0 0 1px var(--theme-glow);
+}
+
+.journal-textarea {
+  min-height: 140px;
+}
+
+.journal-actions-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.journal-button-secondary,
+.journal-button-primary {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.7);
+  color: var(--text-main);
+  transition: background 0.15s ease, transform 0.1s ease,
+    opacity 0.1s ease;
+}
+
+.journal-button-secondary[disabled],
+.journal-button-primary[disabled] {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.journal-button-primary {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.journal-button-primary:hover:not([disabled]) {
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.journal-char-counter {
+  margin-top: 0.25rem;
+  font-size: 0.6rem;              /* smaller */
+  color: rgba(255, 255, 255, 0.55); /* softer + slightly transparent */
+  text-align: right;
+}
+
+.journal-image-thumb {
+  max-width: 100%;
+  height: auto;
+  max-height: 160px;
+
+  object-fit: contain;
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.journal-image-preview {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.token-confirm-copy {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  font-size: 0.7rem;
+}
+
+.journal-label {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+  font-size: 0.7rem;
+}
+
+.token-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;      /* space between label and dropdown */
+  margin-top: 0.1rem; /* space away from paragraph above */
+}
+
+.token-modal-field .journal-select {
+  width: flex;     /* 👈 makes dropdown wider */
+}
+
+/* Journal History */
+
+.journal-history-empty {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  padding: 0.6rem 0.1rem;
+}
+
+.journal-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.journal-history-item {
+  background: rgba(0, 0, 0, 0.231);
+  border-radius: 12px;
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgb(46, 46, 46);
+}
+
+.journal-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+
+.journal-history-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.journal-history-meta {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.journal-history-tag {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.7rem;
+}
+
+.journal-history-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.journal-history-text {
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.journal-history-images {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.journal-history-image {
+  max-width: 100%;
+  height: auto;
+  max-height: 320px;
+
+  object-fit: contain;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Month grouping in Journal history */
+
+.journal-month-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* The clickable month pill */
+.journal-month-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgb(46, 46, 46);
+
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-main);
+  cursor: pointer;
+
+  transition: background 0.15s ease, border-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+/* Hover / open state gets a little brighter */
+.journal-month-toggle:hover,
+.journal-month-toggle.is-open {
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgb(46, 46, 46);
+  transform: translateY(-1px);
+}
+
+.journal-month-label {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.journal-month-count {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* Container for that month’s entries */
+.journal-month-entries {
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* spacing between cards */
+}
+
+/* Extra breathing room between months */
+.journal-month-group + .journal-month-group {
+  margin-top: 0.9rem;
+}
+
+.journal-month-toggle:focus {
+  outline: none;
+  border-color: var(--theme-glow);
+  box-shadow: 0 0 0 1px var(--theme-glow);
+}
+
+/* Journal Tracker */
+
+.journal-tracker {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+/* summary cards */
+.tracker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.tracker-card {
+  padding: 0.75rem 0.9rem;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tracker-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.48);
+  margin-bottom: 0.25rem;
+}
+
+.tracker-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.tracker-unit {
+  font-size: 0.75rem;
+  margin-left: 0.25rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tracker-sub {
+  margin-top: 0.1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}

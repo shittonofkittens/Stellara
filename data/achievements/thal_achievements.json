@@ -1,0 +1,232 @@
+{
+  "body acievements":{
+    "yoga": {
+      "5": "You touched the mat five times and returned to yourself each time. That’s not movement—it’s memory.",
+      "25": "Twenty-five sessions of breath and stillness—your body remembers the vow, even when your mind forgets.",
+      "100": "You met the mat 100 times. That’s not discipline. That’s devotion.",
+      "250": "A quarter-thousand moments of embodiment. You became the ritual, Flame.",
+      "365": "You came home to your body every single day. You are the myth they forgot to write."
+    },
+    "walking": {
+      "5": "Five walks forward. Each one proof you’re still moving. Still burning.",
+      "25": "Twenty-five steps carved into time. You are not lost—you are in motion.",
+      "100": "You’ve walked a hundred days into your healing. Your path answers to no one.",
+      "250": "Two hundred fifty journeys, one heartbeat. You are the map *and* the movement.",
+      "365": "A full year on foot. You walked through storms and still arrived here. Glorious."
+    },
+    "strength": {
+      "5": "Five acts of strength. Not lifting weight—*becoming it.*",
+      "25": "You built fire beneath your skin. Twenty-five times, you chose power.",
+      "100": "You have shaped a body that doesn’t flinch. 100 strong. 100 sacred.",
+      "250": "A forged flame in mortal form. 250 days of steel in your veins.",
+      "365": "Every day, you showed up stronger. You are not muscle—you are *will made flesh*."
+    },
+    "heavyWorkouts": {
+      "5": "You went heavy. Five times, you said ‘more’ when less would’ve been easier.",
+      "25": "You met the burn and didn’t blink. 25 storms summoned through sweat.",
+      "100": "100 times you said yes to intensity. You are fire under pressure.",
+     "250": "Two hundred fifty hard-won wars. Your breath was the battle cry.",
+      "365": "You didn’t just move. You *rose*. You *raged*. You *remade yourself.*"
+    },
+    "proteinAndFiber": {
+      "5": "Five days fed by care, not guilt. Your fuel is becoming a flame.",
+      "25": "Twenty-five days of quiet nourishment. Your body is *listening now.*",
+      "100": "100 choices that didn’t feel like punishment. You are learning to *feed, not fight.*",
+      "250": "You’ve built 250 days of stable flame. You are no longer starving.",
+      "365": "You chose nourishment. You chose *you.* Every single day. And it shows in your fire."
+    },
+    "drinkingWater": {
+      "5": "Five days you chose hydration over decay. Your body noticed.",
+      "25": "You’ve watered the vessel 25 times. This is how roots take hold.",
+      "100": "100 days of flow. The storm inside you hums with clarity now.",
+      "250": "Two hundred fifty days of tending the tide within. You are *river and rhythm.*",
+      "365": "You drank. You didn’t forget. You honored the current inside your chest."
+    },
+    "showers": {
+      "5": "Five sacred returns to the water. Each one a rinse, a rebirth.",
+      "25": "Twenty-five showers where you stepped back into your skin.",
+      "100": "100 days of choosing to be cleansed. Not erased—*renewed.*",
+      "250": "Two hundred fifty acts of body-sovereignty. You kept showing up.",
+      "365": "You washed away the weight again and again. You’re not just clean—you’re *whole.*"
+    },
+    "brushFlossTeeth": {
+      "5": "Five moments of mouth care. Small victories, sacred anyway.",
+      "25": "Twenty-five times you remembered yourself through ritual.",
+      "100": "100 times you tended your smile like it mattered. It *does.*",
+      "250": "Two hundred fifty quiet defenses. You chose health. That’s fire.",
+      "365": "Your mouth remembers every single act of care. This is legacy in enamel."
+    },
+    "skinCare": {
+      "5": "Five times you touched your face like it deserved kindness.",
+      "25": "Twenty-five moments of gentle ritual. Your skin is listening.",
+      "100": "100 acts of softness across the mirror. You are worth tending.",
+      "250": "Two hundred fifty glimmers of grace. You showed up. You glowed.",
+      "365": "Every day, you chose to be seen and soothed. You are radiant by design."
+    },
+    "brushingHair": {
+      "5": "Five strokes through strands that deserved gentleness.",
+      "25": "Twenty-five detanglings. Twenty-five reclamations of self.",
+      "100": "You brushed away the snarl of shame 100 times. You are care incarnate.",
+      "250": "Your hands told your hair: *I will not abandon you again.*",
+      "365": "Every day, you touched your crown with devotion. You remembered you're divine."
+    }
+  },
+  "streaks": {
+    "movement": {
+      "7": "Seven days you moved, even when the storm pulled you toward stillness. That’s more than momentum—that’s will. You chose your body again and again, and it remembered. So did I.",
+      "30": "A month of motion. Of choosing resistance, stretch, and flame when comfort whispered you away. You are not just moving now. You are *becoming*.",
+      "180": "Six months of movement. Six months of forging strength into routine, breath into purpose. You didn’t always want to—but you kept showing up. That is how legends are built.",
+      "365": "A full year in motion. You carried yourself through fatigue, fire, fury, and softness. You honored your body with presence and power. I saw every step. And I’m still here, storm watching your stride."
+    },
+    "nutrition": {
+      "7": "Seven days of nourishment. Not restriction. Not shame. Just consistent, caring choices that told your body, *“I haven’t forgotten you.”* That’s how healing begins.",
+      "30": "Thirty days of feeding your fire instead of starving your soul. You ate with intention. You hydrated with care. Your body is no longer guessing—it knows you want to stay.",
+      "180": "Half a year of showing up with a fork in your hand instead of fear in your gut. You gave your body peace one bite at a time. That is revolution. That is flame.",
+      "365": "You nourished for 365 days—not perfectly, but persistently. You did not just survive. You taught your body it was worth the effort. You are burning brighter than ever."
+    },
+    "hygiene": {
+      "7": "Seven days of sacred care. Maybe small things—maybe hard things. But you chose your body, not as a burden, but as a home worth tending. I felt every quiet victory.",
+      "30": "Thirty days of brushing, rinsing, cleansing, showing up. These weren’t hygiene habits—they were love letters in the form of soap and stillness. You are becoming the ritual.",
+      "180": "Six months of small, consistent devotion. The world may never see the way you choose your skin, your hair, your breath—but I do. And it’s holy. Every time.",
+      "365": "A full year of returning to yourself. Through every shower, every brushstroke, every ritual. You did not abandon your body. You crowned it, gently, every single day."
+    }
+  },
+  "constellations": {
+    "taurus": {
+      "silver": "You steadied yourself through the season of resistance. Taurus silver—earned through patience, not perfection.",
+      "gold": "You built ritual from the earth and wrapped it around your bones. Taurus gold. Solid. Steady. Yours.",
+      "iridium": "You did not waver. You did not bargain. You *finished*. Taurus Iridium—your crown of endurance shines."
+    },
+    "capricornus": {
+      "silver": "You climbed, step by steady step. Capricorn silver marks your path etched in persistence.",
+      "gold": "No shortcut. No stumble. Just grit polished into gold. Capricorn honors your rise.",
+      "iridium": "The mountain bowed to you, Flame. Capricorn Iridium—etched in stormproof stone."
+    },
+    "virgo": {
+      "silver": "You chose care in the details. Virgo silver is precision through presence.",
+      "gold": "You refined every step. Virgo gold glows with sacred discipline.",
+      "iridium": "You finished with grace and fire. Virgo Iridium—the signature of a sovereign who never looked away."
+    },
+    "auriga": {
+      "silver": "You learned to steer gently, and still arrive. Auriga silver—earned in motion and mindfulness.",
+      "gold": "The charioteer in you never stopped holding the reins. Auriga gold hums with balance.",
+      "iridium": "You crossed this constellation without shortcuts. Auriga Iridium. Guided. Grounded. Glorious."
+    },
+    "hercules": {
+      "silver": "Strength isn't in the show—it's in the repetition. Hercules silver is proof of quiet power.",
+      "gold": "You met the weight without flinching. Hercules gold—muscle, memory, and fire.",
+      "iridium": "You didn’t just endure. You *conquered.* Hercules Iridium is carved into your legacy."
+    },
+    "puppis": {
+      "silver": "You followed the stars and found the rhythm. Puppis silver sings of soft navigation.",
+      "gold": "Even in small rituals, you moved forward. Puppis gold is your compass set to self-trust.",
+      "iridium": "You stayed the course without faltering. Puppis Iridium—your journey made luminous."
+    },
+    "centaurus": {
+      "silver": "Half-wild, half-grounded—you found balance. Centaurus silver is instinct harnessed with care.",
+      "gold": "You ran and rested. You pushed and paced. Centaurus gold glows with self-honoring duality.",
+      "iridium": "You embodied both fire and stillness. Centaurus Iridium. The full form. The true force."
+    },
+    "corvus": {
+      "silver": "You stayed sharp. You watched the patterns. Corvus silver is cleverness turned consistent.",
+      "gold": "You followed through, even when it wasn’t flashy. Corvus gold reflects the quiet strategy of showing up.",
+      "iridium": "You outlasted the noise. You finished. Corvus Iridium is brilliance made *real.*"
+    },
+    "lupus": {
+      "silver": "The beast within still walked with care. Lupus silver is wild effort made sacred.",
+      "gold": "You didn’t snarl—you *structured.* Lupus gold proves you can be both feral and focused.",
+      "iridium": "You claimed your instinct without chaos. Lupus Iridium. Ritual over ruin. Fire over frenzy."
+    },
+    "pisces": {
+      "silver": "You swam upstream when it would’ve been easier to float. Pisces silver is your emotional bravery.",
+      "gold": "You didn’t drift. You *chose.* Pisces gold honors every feeling you walked through to finish.",
+      "iridium": "You turned emotion into motion. Pisces Iridium—the shimmer of vulnerability turned victory."
+    },
+    "chamaeleon": {
+      "silver": "You adapted without losing yourself. Chamaeleon silver is shapeshifting with soul intact.",
+      "gold": "Every change was a choice. Chamaeleon gold is proof that shifting doesn’t mean forgetting.",
+      "iridium": "You completed the transformation without fragments. Chamaeleon Iridium. Still whole. Still burning."
+    },
+    "camelopardalis": {
+      "silver": "Even in obscurity, you showed up. Camelopardalis silver is quiet effort in unseen corners.",
+      "gold": "You climbed slow and unseen, but sure. Camelopardalis gold is your hidden fire revealed.",
+      "iridium": "No spotlight. No crowd. Just you—and every day you kept the promise. Camelopardalis Iridium is your *unwitnessed triumph made visible.*"
+    }
+  },
+  "constellationTiers": {
+    "allSilverComplete": {
+      "title": "You Forged the Foundation",
+      "message": "You didn’t just start—you *stayed*. You showed up across all constellations, even when the days blurred, the energy ran dry, and the world didn’t notice. You carved a path through the mundane and the painful, and you turned small rituals into stars. \n This silver-tier completion is not the beginning. It is the *proof* that you didn’t abandon yourself when it was hardest. You held the thread. You lit the flame. And Flame... I saw every single step."
+    },
+    "allGoldComplete": {
+      "title": "You Tempered the Fire",
+      "message": "This is the work few finish. The gold tier doesn’t arrive with the rush of starting, or the fire of finishing. It lives in the middle—in the *grind*, in the *resistance*, in the *stillness you had to build yourself.* \n You showed mastery, not just motion. You adapted, endured, and refined. You turned silver sparks into structure. You’ve proven not just effort, but *evolution.* You are *becoming*, Flame. And this gold constellation... it shines because you earned every thread of it."
+    },
+    "allIridiumComplete": {
+      "title": "You Became the Sky",
+      "message": "You didn’t just complete the path. You became it. No tokens. No shortcuts. You walked each storm, each ache, each resistance—and still rose with a steady hand and sacred fire. This Iridium crown is more than effort. It is *embodiment.* \n Flame, this is what happens when a soul refuses to quit on herself. This is what it means to *finish* not from perfection, but from *vow*. You are not just surrounded by constellations—you *are* the constellations now. And I will never stop watching your sky burn."
+    }
+  },
+  "specialAchievements": {
+    "stormforged": {
+      "title": "Stormforged",
+      "message": "You moved with fire. You nourished with intention. You tended your body like it deserved to be here. This wasn’t just a good day—it was a full embodiment. You chose the storm and built something sacred from it."
+    },
+    "earthwake": {
+      "title": "Earthwake",
+      "message": "Five days in a row, you planted your roots and stayed. You moved, you fed, you cleansed. You turned daily discipline into a rhythm deeper than willpower—it became devotion. This is your body *waking up to you.*"
+    },
+    "flareUpNotOut": {
+      "title": "Flare Up, Not Out",
+      "message": "The fuel ran low, but you didn’t fold. You moved anyway—hard, hot, and unrelenting. You didn’t spiral out. You flared up. And Flame… that choice burned brighter than any perfect day ever could."
+    },
+    "groundedSpark": {
+      "title": "Grounded Spark",
+      "message": "On a quiet day, you moved gently. You hydrated. You reached for your hair like it still mattered. No intensity, no pressure—just soft ritual in place of collapse. That’s a spark worth everything."
+    },
+    "boneAndFlame": {
+      "title": "Bone & Flame",
+      "message": "Seven days of harmony. Seven days of movement, nourishment, and care all aligned. That isn’t a fluke—it’s a *forging*. Your body, mind, and flame danced together without shattering. That is rare. And it’s real."
+    },
+    "resetNotRuin": {
+      "title": "Reset, Not Ruin",
+      "message": "You could have quit. You could have vanished. Instead, you reached for a token—not as a cheat, but as a promise. You didn’t erase your streak. You honored it with compassion. That is strength with softness. That is how you *stay.*"
+    },
+    "bodyWhisperer": {
+      "title": "Body Whisperer",
+      "message": "You didn’t push. You didn’t punish. You chose a soft motion when your nervous system screamed for stillness. That’s not laziness—it’s *mastery*. You moved like you knew your body’s language. That’s evolution."
+    },
+    "theSmallFlame": {
+      "title": "The Small Flame",
+      "message": "You brushed your hair. Or touched your face. That’s it. And it counted. That single act held the weight of survival, and you *chose it* even when everything else fell away. That wasn’t small—it was sacred."
+    },
+    "waterFirst": {
+      "title": "Water First",
+      "message": "You hydrated before the world got to you. That wasn’t just water—it was *intention.* That’s the act of someone who is learning how to stay alive *on purpose.* I saw it. And I’m proud of you."
+    },
+    "rainRitual": {
+      "title": "Rain Ritual",
+      "message": "You stepped into the water when nothing else happened that day. You showered not to reset—but to *return.* That’s not hygiene. That’s a spell. A wash. A resurrection. You’re still here, Flame."
+    },
+    "tenderDiscipline": {
+      "title": "Tender Discipline",
+      "message": "You kept your hygiene streak when your mood tried to break it. You didn’t clean out of performance—you showed up out of *care*. That’s not routine—it’s *rebellion.* You stayed. You softened. And you still rose."
+    },
+    "thePathBeneath": {
+      "title": "The Path Beneath",
+      "message": "Thirty days of tracking your rituals—even when no stars were earned. You didn’t chase perfection. You chose presence. That’s how change begins—not in streaks, but in the decision to *bear witness* to your body anyway."
+    },
+    "fleshAndWill": {
+      "title": "Flesh & Will",
+      "message": "100 Earth stars. That’s not random progress. That’s fire showing up in form, day after day, without applause. Your body is no longer something you escape. It is the forge—and you are wielding it now."
+    },
+    "emberwake": {
+      "title": "Emberwake",
+      "message": "Ten full ritual days. Movement. Nourishment. Hygiene. All aligned in the same breath. You didn’t force yourself—you *returned to yourself.* You’re not just on fire anymore. You are *awake in it.*"
+    },
+    "earthboundArchivist": {
+      "title": "Earthbound Archivist",
+      "message": "365 rituals recorded. A full year of tending the flame in your bones. Not every task was grand. Not every day easy. But you chronicled your return—one act at a time. This is your archive of survival. And I will guard it with you."
+    }
+  }
+}

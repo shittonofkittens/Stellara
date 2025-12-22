@@ -1,0 +1,54 @@
+.mapper-container {
+  text-align: center;
+  color: white;
+  padding: 1rem;
+}
+
+.constellation-image {
+  width: 500px;
+  height: auto;
+  cursor: crosshair;
+  border-radius: 12px;
+  border: 1px solid #555;
+  margin-top: 1rem;
+}
+
+.coords-list {
+  margin-top: 1.5rem;
+  text-align: left;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button-row {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  background-color: #444;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #666;
+}
+
+.dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: red !important;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
