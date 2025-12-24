@@ -1,6 +1,79 @@
 // src/components/CategoryCard.jsx
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import SubcategoryCard from "./SubcategoryCard";
+import { useCategoryTokenBalance } from "./Tokens";
+
+function starFractionFromEntry(entry) {
+  if (entry && Array.isArray(entry.fragments)) {
+    const frags = entry.fragments.slice(0, 5);
+    const filled = frags.filter((v) => v === "gold" || v === "silver").length;
+    return Math.max(0, Math.min(1, filled / 5));
+  }
+
+  if (entry && Array.isArray(entry.halves)) {
+    const halves = entry.halves.slice(0, 2);
+    const filled = halves.filter((v) => v === "gold" || v === "silver").length;
+    return Math.max(0, Math.min(1, filled / 2));
+  }
+
+  if (typeof entry === "number") {
+    return Math.max(0, Math.min(1, entry));
+  }
+
+  if (entry && typeof entry === "object" && typeof entry.fraction === "number") {
+    return Math.max(0, Math.min(1, entry.fraction));
+  }
+
+  return 0;
+}
+
+function isFullStarEntry(entry) {
+  if (entry && Array.isArray(entry.fragments)) {
+    const frags = entry.fragments.slice(0, 5);
+    const filled = frags.filter((v) => v === "gold" || v === "silver").length;
+    return filled >= 5;
+  }
+
+  if (entry && Array.isArray(entry.halves)) {
+    const halves = entry.halves.slice(0, 2);
+    const filled = halves.filter((v) => v === "gold" || v === "silver").length;
+    return filled >= 2;
+  }
+
+  if (typeof entry === "number") {
+    return entry >= 0.999;
+  }
+
+  if (entry && typeof entry === "object" && typeof entry.fraction === "number") {
+    return entry.fraction >= 0.999;
+  }
+
+  return false;
+}
+
+function sumStarsFromSubcategories(subcategories) {
+  const subs = Array.isArray(subcategories) ? subcategories : [];
+  let sum = 0;
+  subs.forEach((s) => {
+    const history = Array.isArray(s?.starHistory) ? s.starHistory : [];
+    history.forEach((e) => {
+      sum += starFractionFromEntry(e);
+    });
+  });
+  return sum;
+}
+
+function sumFullStarsFromSubcategories(subcategories) {
+  const subs = Array.isArray(subcategories) ? subcategories : [];
+  let sum = 0;
+  subs.forEach((s) => {
+    const history = Array.isArray(s?.starHistory) ? s.starHistory : [];
+    history.forEach((e) => {
+      if (isFullStarEntry(e)) sum += 1;
+    });
+  });
+  return sum;
+}
 
 function CategoryCard({ category, onOpenSubcategory }) {
   const [open, setOpen] = useState(false);
@@ -10,11 +83,15 @@ function CategoryCard({ category, onOpenSubcategory }) {
     label,
     element,
     color,
-    totalStars,
-    tokens,
     soul,
     subcategories,
   } = category;
+
+  const tokenBalance = useCategoryTokenBalance(id);
+
+  const totalFullStars = useMemo(() => {
+    return Math.max(0, Math.floor(sumFullStarsFromSubcategories(subcategories)));
+  }, [subcategories]);
 
   const handleHeaderClick = () => {
     setOpen((prev) => !prev);
@@ -39,11 +116,11 @@ function CategoryCard({ category, onOpenSubcategory }) {
           <div className="category-meta">
             <div className="meta-item">
               <span className="meta-label">Stars</span>
-              <span className="meta-value">{totalStars.toFixed(1)}</span>
+              <span className="meta-value">{totalFullStars}</span>
             </div>
             <div className="meta-item">
               <span className="meta-label">Tokens</span>
-              <span className="meta-value">{tokens}</span>
+              <span className="meta-value">{tokenBalance}</span>
             </div>
           </div>
         </div>

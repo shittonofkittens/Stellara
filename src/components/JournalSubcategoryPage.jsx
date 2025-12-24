@@ -5,6 +5,20 @@ import SubcategoryShell, {
   TAB_HISTORY,
   TAB_TRACKER,
 } from "./SubcategoryShell";
+import { useCategoryTokenBalance, ensureCategoryTokensSeeded } from "./Tokens";
+import { earnTokens, spendTokens } from "../utils/tokens";
+
+function emitJournalDataChanged(categoryId, subcategoryId) {
+  try {
+    window.dispatchEvent(
+      new CustomEvent("journal-data-changed", {
+        detail: { categoryId, subcategoryId },
+      })
+    );
+  } catch {
+    // ignore
+  }
+}
 
 // simple helper
 function capitalize(str) {
@@ -40,7 +54,15 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
   const [activeTab, setActiveTab] = useState(TAB_INPUT);
   const [editingEntry, setEditingEntry] = useState(null);
   const STORAGE_KEY = `journalEntries:${category.id}:${subcategory.id}`;
+  const TOKEN_STORAGE_KEY = `journalTokens:${category.id}:${subcategory.id}`;
   const [tokenTimeOfDay, setTokenTimeOfDay] = useState("morning");
+
+  // Category-wide token balance (stubbed/seeded for now).
+  const availableTokens = useCategoryTokenBalance(category?.id);
+
+  useEffect(() => {
+    ensureCategoryTokensSeeded(category?.id);
+  }, [category?.id]);
 
   const tokenModalContent = (
     <>
@@ -74,6 +96,15 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
     }
   });
 
+  const [tokenUses, setTokenUses] = useState(() => {
+    try {
+      const stored = localStorage.getItem(TOKEN_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
   // input fields
   const [title, setTitle] = useState("");
   const [timeOfDay, setTimeOfDay] = useState(() => {
@@ -91,28 +122,97 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
   const todayKey = `${yyyy}-${mm}-${dd}`;
   // how many entries have been logged this calendar month
   const monthKey = `${yyyy}-${mm}`;
+  const yearKey = `${yyyy}`;
+
+  // Max possible fragments
+  const daysInThisMonth = new Date(yyyy, today.getMonth() + 1, 0).getDate();
+  const monthlyMaxFragments = daysInThisMonth * 3;
+  const yearlyMaxFragments = 365 * 3;
 
   // Each day has up to 3 fragment slots: Morning, Afternoon, Evening.
-  // We count each (dateKey + timeOfDay) at most once.
+  // We count each (dateKey + timeOfDay) at most once, from entries or tokens.
   const uniqueSlotsThisMonth = new Set();
 
   entries.forEach((entry) => {
     if (!entry.dateKey || !entry.dateKey.startsWith(monthKey)) return;
-
     const slotKey = `${entry.dateKey}-${entry.timeOfDay || ""}`;
+    uniqueSlotsThisMonth.add(slotKey);
+  });
+
+  tokenUses.forEach((token) => {
+    if (!token.dateKey || !token.dateKey.startsWith(monthKey)) return;
+    const slotKey = `${token.dateKey}-${token.timeOfDay || ""}`;
     uniqueSlotsThisMonth.add(slotKey);
   });
 
   const entriesThisMonth = uniqueSlotsThisMonth.size;
 
-  const monthlyGoal = subcategory.monthMaxStars;
+  // Topbar star: show the last (current) star for this month, with empty fragments.
+  // If all stars are full (exact multiple of 5 fragments), show an empty star.
+  const timeOrder = { morning: 1, afternoon: 2, evening: 3 };
+  const monthlySlotMap = new Map();
+
+  entries.forEach((e) => {
+    if (!e?.dateKey || !e?.timeOfDay) return;
+    if (!e.dateKey.startsWith(monthKey)) return;
+    const key = `${e.dateKey}__${e.timeOfDay}`;
+    monthlySlotMap.set(key, {
+      dateKey: e.dateKey,
+      timeOfDay: e.timeOfDay,
+      fillType: "gold",
+    });
+  });
+
+  tokenUses.forEach((t) => {
+    if (!t?.dateKey || !t?.timeOfDay) return;
+    if (!t.dateKey.startsWith(monthKey)) return;
+    const key = `${t.dateKey}__${t.timeOfDay}`;
+    if (!monthlySlotMap.has(key)) {
+      monthlySlotMap.set(key, {
+        dateKey: t.dateKey,
+        timeOfDay: t.timeOfDay,
+        fillType: "silver",
+      });
+    }
+  });
+
+  const earnedSlotsThisMonth = Array.from(monthlySlotMap.values()).sort((a, b) => {
+    if (a.dateKey !== b.dateKey) return a.dateKey.localeCompare(b.dateKey);
+    return (timeOrder[a.timeOfDay] || 0) - (timeOrder[b.timeOfDay] || 0);
+  });
+
+  const monthlyRemainder = earnedSlotsThisMonth.length % 5;
+  const topbarStarFragments = new Array(5).fill(undefined);
+  if (monthlyRemainder !== 0) {
+    const start = earnedSlotsThisMonth.length - monthlyRemainder;
+    for (let i = 0; i < monthlyRemainder; i++) {
+      topbarStarFragments[i] = earnedSlotsThisMonth[start + i].fillType;
+    }
+  }
+
+  // Yearly fragments: unique (dateKey + timeOfDay) in the current calendar year
+  const uniqueSlotsThisYear = new Set();
+
+  entries.forEach((entry) => {
+    if (!entry.dateKey || !entry.dateKey.startsWith(`${yearKey}-`)) return;
+    const slotKey = `${entry.dateKey}-${entry.timeOfDay || ""}`;
+    uniqueSlotsThisYear.add(slotKey);
+  });
+
+  tokenUses.forEach((token) => {
+    if (!token.dateKey || !token.dateKey.startsWith(`${yearKey}-`)) return;
+    const slotKey = `${token.dateKey}-${token.timeOfDay || ""}`;
+    uniqueSlotsThisYear.add(slotKey);
+  });
+
+  const entriesThisYear = uniqueSlotsThisYear.size;
 
   // how many journal entries were logged *today* in this subcategory
   const todayFragments = entries.filter(
     (entry) => entry.dateKey === todayKey
   ).length;
 
-  const stats = computeJournalStats(entries);
+  const stats = computeJournalStats(entries, tokenUses);
 
   useEffect(() => {
     try {
@@ -120,7 +220,19 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
     } catch {
       // optional: silently fail or log later
     }
+
+    emitJournalDataChanged(category.id, subcategory.id);
   }, [entries, STORAGE_KEY]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(tokenUses));
+    } catch {
+      // optional: silently fail or log later
+    }
+
+    emitJournalDataChanged(category.id, subcategory.id);
+  }, [tokenUses, TOKEN_STORAGE_KEY]);
 
   const handleSaveEntry = (entryData) => {
     // EDIT MODE
@@ -142,7 +254,6 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
       categoryId: category.id,
       subcategoryId: subcategory.id,
       createdAt: new Date().toISOString(),
-      lowEnergy: !!lowEnergy,
     };
 
     setEntries((prev) => [entry, ...prev]);
@@ -150,7 +261,89 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
     setTitle("");
   };
 
-    return (
+  const tokenHistoryEntries = tokenUses.map((t) => {
+    const isLowEnergy = t?.lowEnergy === true || t?.type === "low-energy";
+    return {
+    id: t.id,
+    dateKey: t.dateKey,
+    timeOfDay: t.timeOfDay,
+    title: formatEuropeanDate(t.dateKey),
+    text: isLowEnergy ? "Low-energy token applied." : "Token applied.",
+    isToken: true,
+    lowEnergy: isLowEnergy,
+    createdAt: t.createdAt,
+    };
+  });
+
+  const historyEntriesCombined = [...tokenHistoryEntries, ...entries].sort(
+    (a, b) => {
+      // Newest day first
+      if (a.dateKey !== b.dateKey) return b.dateKey.localeCompare(a.dateKey);
+
+      // Within a day, always Morning → Afternoon → Evening
+      const aKey = String(a?.timeOfDay || "").toLowerCase();
+      const bKey = String(b?.timeOfDay || "").toLowerCase();
+      const aT = timeOrder[aKey] ?? 99;
+      const bT = timeOrder[bKey] ?? 99;
+      if (aT !== bT) return aT - bT;
+
+      // Stable fallback (oldest first within same time-of-day)
+      const aTime = Date.parse(a?.createdAt || "");
+      const bTime = Date.parse(b?.createdAt || "");
+      if (Number.isFinite(aTime) && Number.isFinite(bTime)) return aTime - bTime;
+      if (Number.isFinite(aTime)) return -1;
+      if (Number.isFinite(bTime)) return 1;
+      return String(a?.id || "").localeCompare(String(b?.id || ""));
+    }
+  );
+  const tokensUsed = tokenUses.length;
+
+  const handleApplyToken = ({ timeOfDay, lowEnergy: lowEnergyCtx } = {}) => {
+    if (!timeOfDay) return;
+
+    // Require available category tokens.
+    const spend = spendTokens({
+      categoryId: category?.id,
+      amount: 1,
+      source: "journal-token",
+      meta: { subcategoryId: subcategory?.id, dateKey: todayKey, timeOfDay },
+    });
+    if (!spend.ok) return;
+
+    // Prevent duplicate token uses for the same day+session.
+    const exists = tokenUses.some(
+      (t) => t.dateKey === todayKey && t.timeOfDay === timeOfDay
+    );
+    if (exists) return;
+
+    const token = {
+      id: `token-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      dateKey: todayKey,
+      timeOfDay,
+      type: lowEnergyCtx ? "low-energy" : "standard",
+      lowEnergy: !!lowEnergyCtx,
+      createdAt: new Date().toISOString(),
+    };
+
+    setTokenUses((prev) => [token, ...prev]);
+  };
+
+  const handleDeleteEntry = (entry) => {
+    if (entry.isToken) {
+      // Best-effort refund of the category token when a token-use is deleted.
+      earnTokens({
+        categoryId: category?.id,
+        amount: 1,
+        source: "journal-token-refund",
+        meta: { subcategoryId: subcategory?.id, dateKey: entry?.dateKey, timeOfDay: entry?.timeOfDay },
+      });
+      setTokenUses((prev) => prev.filter((t) => t.id !== entry.id));
+    } else {
+      setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+    }
+  };
+
+  return (
     <SubcategoryShell
       category={category}
       subcategory={subcategory}
@@ -158,14 +351,29 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
       activeTab={activeTab}
       onTabChange={setActiveTab}
       summaryLabel="Monthly Fragments"
-      summaryValue={`${entriesThisMonth} / ${monthlyGoal}`}
-      historyEntries={entries}
+      summaryValue={`${entriesThisMonth} / ${monthlyMaxFragments}`}
+      summaryStarFragments={topbarStarFragments}
+      monthlyFragments={entriesThisMonth}
+      yearlyFragments={entriesThisYear}
+      monthlyFragmentsMax={monthlyMaxFragments}
+      yearlyFragmentsMax={yearlyMaxFragments}
+      historyEntries={historyEntriesCombined}
       historyTheme="air"
       tokenModalContent={tokenModalContent}
+      onConfirmToken={(ctx) => handleApplyToken({ timeOfDay: tokenTimeOfDay, lowEnergy: ctx?.lowEnergy })}
+      tokensUsed={tokensUsed}
+      lowEnergy={!!lowEnergy}
+      onPatchHistoryEntries={setEntries}
+      availableTokens={availableTokens}
+      fragmentsLogged={stats.totalFragments}
+      entriesLogged={stats.totalEntries}
+      avgChars={stats.avgChars}
+      totalStarsApprox={stats.totalStarsApprox}
       onRequestEditEntry={(entry) => {
         setEditingEntry(entry);
         setActiveTab(TAB_INPUT);
       }}
+      onDeleteEntry={handleDeleteEntry}
 
       renderInput={() => (
         <JournalInputTab
@@ -187,6 +395,7 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
           className="token-select"
           value={timeOfDay}
           onChange={(e) => setTimeOfDay(e.target.value)}
+          disabled={(availableTokens || 0) <= 0}
         >
           <option value="morning">Morning</option>
           <option value="afternoon">Afternoon</option>
@@ -200,6 +409,7 @@ function JournalSubcategoryPage({ category, subcategory, onBack, lowEnergy }) {
           stats={stats}
           category={category}
           subcategory={subcategory}
+          tokensUsed={tokenUses}
         />
       )}
     />
@@ -274,7 +484,7 @@ function JournalInputTab({
         </div>
       </div>
 
-      <div className="journal-field">
+      <div className="journal-field" style={{ marginTop: "0.9rem" }}>
         <label className="journal-label">Entry</label>
         <textarea
           className="journal-textarea"
@@ -340,7 +550,7 @@ function JournalInputTab({
   );
 }
 
-function JournalTrackerTab({ entries, stats, subcategory }) {
+function JournalTrackerTab({ entries, stats, subcategory, tokensUsed }) {
   const {
     totalEntries,
     totalFragments,
@@ -364,45 +574,8 @@ function JournalTrackerTab({ entries, stats, subcategory }) {
 
   return (
     <div className="journal-tracker">
-      {/* Top summary row */}
-      <div className="tracker-grid">
-        <div className="tracker-card">
-          <div className="tracker-label">Fragments logged</div>
-          <div className="tracker-value">
-            {totalFragments}
-            <span className="tracker-unit"> fragments</span>
-          </div>
-          <div className="tracker-sub">
-            ≈ {totalStarsApprox.toFixed(1)} stars
-          </div>
-        </div>
-
-        <div className="tracker-card">
-          <div className="tracker-label">Entries logged</div>
-          <div className="tracker-value">
-            {totalEntries}
-            <span className="tracker-unit"> entries</span>
-          </div>
-          <div className="tracker-sub">
-            Avg length: {avgChars} chars
-          </div>
-        </div>
-      </div>
-
-      <div className="tracker-card">
-        <div className="tracker-label">Low-energy entries</div>
-        <div className="tracker-value">
-          {lowEnergyCount}
-          <span className="tracker-unit"> entries</span>
-        </div>
-        <div className="tracker-sub">
-          Days you marked as low-energy.
-        </div>
-      </div>
-     
-      {/* Time-of-day pattern */}
       <div className="tracker-section">
-        <div className="tracker-section-title">Time-of-day pattern</div>
+        <div className="tracker-label">Time-of-day pattern</div>
 
         <div className="tracker-bar-row">
           <span className="tracker-bar-label">Morning</span>
@@ -446,7 +619,7 @@ function JournalTrackerTab({ entries, stats, subcategory }) {
 
       {/* Length distribution */}
       <div className="tracker-section">
-        <div className="tracker-section-title">Entry length</div>
+        <div className="tracker-label">Entry length</div>
         <div className="tracker-length-row">
           <div className="tracker-length-pill">
             <span className="tracker-pill-label">Short</span>
@@ -473,7 +646,7 @@ function JournalTrackerTab({ entries, stats, subcategory }) {
 
 // --- stats helper ---
 
-function computeJournalStats(entries) {
+function computeJournalStats(entries, tokens = []) {
   // Entries (raw count) — this is what you want for “Entries logged”
   const totalEntries = entries.length;
 
@@ -515,6 +688,21 @@ function computeJournalStats(entries) {
         if (entry.timeOfDay === "morning") morningFragments++;
         if (entry.timeOfDay === "afternoon") afternoonFragments++;
         if (entry.timeOfDay === "evening") eveningFragments++;
+      }
+    }
+  });
+
+  tokens.forEach((token) => {
+    // Tokens don't have text, so no length or lowEnergy from here
+    // But they do count as fragments
+    if (token.dateKey && token.timeOfDay) {
+      const key = `${token.dateKey}__${token.timeOfDay}`;
+      if (!fragmentKeys.has(key)) {
+        fragmentKeys.add(key);
+
+        if (token.timeOfDay === "morning") morningFragments++;
+        if (token.timeOfDay === "afternoon") afternoonFragments++;
+        if (token.timeOfDay === "evening") eveningFragments++;
       }
     }
   });

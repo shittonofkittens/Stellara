@@ -1,13 +1,11 @@
 // src/components/Sidebar.jsx
 import React, { useState } from "react";
 
-function Sidebar({ open, onClose }) {
+function Sidebar({ open, onClose, onNavigate }) {
   const [constellationsOpen, setConstellationsOpen] = useState(true);
 
   const handleNav = (target) => {
-    // For now, just log the intent.
-    // Later you can hook this into routing / page state.
-    console.log("Navigate to:", target);
+    onNavigate?.(target);
     onClose();
   };
 

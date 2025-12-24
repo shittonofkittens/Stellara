@@ -64,13 +64,13 @@
 
 /* ON state — quiet ember */
 .low-energy-toggle.is-on {
-  border-color: rgba(255, 149, 102, 0.55);
+  border-color: rgba(201, 102, 255, 0.55);
   background: rgba(40, 30, 24, 0.55);
 }
 
 .low-energy-toggle.is-on .low-energy-dot {
-  background: rgba(255, 149, 102, 0.8);
-  border-color: rgba(255, 149, 102, 0.9);
+  background: rgba(168, 102, 255, 0.8);
+  border-color: rgba(158, 102, 255, 0.9);
 }
 
 .low-energy-toggle:focus-visible,
@@ -82,10 +82,11 @@
 /* Low-energy entry highlight */
 /* Low-energy entry highlight — neutral, no color clash */
 .low-energy-entry {
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: 1px solid var(--theme-glow);
   box-shadow:
-    0 0 4px rgba(255, 255, 255, 0.25),
-    inset 0 0 2px rgba(255, 255, 255, 0.15);
+    0 0 0 1px var(--theme-glow),
+    0 0 12px var(--theme-glow),
+    inset 0 0 2px rgba(0, 0, 0, 0.25);
 }
 
 /* CATEGORY CARDS */
@@ -238,6 +239,7 @@
   border-radius: 12px;
   padding: 0.8rem 0.9rem 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -293,6 +295,12 @@
 
 .today-bubble-complete {
   border-color: transparent;
+}
+
+.journal-complete-bubble {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
 }
 
 .today-label {
@@ -371,6 +379,18 @@
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.summary-block.is-star-summary {
+  min-width: unset;
+  padding: 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.summary-block.is-star-summary .star-strip {
+  padding-bottom: 0;
 }
 
 .summary-label {

@@ -29,6 +29,12 @@ const height = maxY - minY || 100;
 
 // 1/5 segments
 const SEGMENT_INDICES = [
+  // Fill order must match requested sequence:
+  // 1: [0,1,2,3]
+  // 2: [0,3,4,5]
+  // 3: [0,5,6,7]
+  // 4: [0,7,8,9]
+  // 5: [0,9,10,1]
   [0, 1, 2, 3],
   [0, 3, 4, 5],
   [0, 5, 6, 7],
@@ -38,12 +44,14 @@ const SEGMENT_INDICES = [
 
 // 1/2-star halves
 const HALF_INDICES = [
-  [0, 2, 3, 4, 5, 6, 7],       // half A
-  [0, 7, 8, 9, 10, 1, 2],      // half B
+  // Fill order (per spec): left first, then right
+  [0, 7, 8, 9, 10, 1, 2],      // left
+  [0, 2, 3, 4, 5, 6, 7],       // right
 ];
 
 const GOLD_COLOR = "#ffd86a";
 const SILVER_COLOR = "#dfe3f2";
+const BASE_GREY = "rgba(255, 255, 255, 0.15)";
 
 function buildPolygonPoints(indices) {
   return indices
@@ -102,7 +110,7 @@ function StarStrip({ starHistory = [], accentColor }) {
     return (
       <div className="star-strip empty-strip">
         <span className="empty-strip-text">
-          No stars recorded yet this month.
+          No stars recorded yet.
         </span>
       </div>
     );
@@ -157,25 +165,25 @@ function StarStrip({ starHistory = [], accentColor }) {
                 </filter>
               </defs>
 
+              {/* Base star (always visible) */}
+              {SEGMENT_INDICES.map((indices, segIndex) => (
+                <polygon
+                  key={`base-${segIndex}`}
+                  points={buildPolygonPoints(indices)}
+                  fill={BASE_GREY}
+                />
+              ))}
+
               {/* FILL LOGIC */}
               {norm.mode === "fragments" &&
                 SEGMENT_INDICES.map((indices, segIndex) => {
                   const frag = norm.fragments[segIndex];
 
-                  let fill;
-                  let filter;
+                  if (frag !== "gold" && frag !== "silver") return null;
 
-                  if (frag === "gold") {
-                    fill = GOLD_COLOR;
-                    filter = "url(#glow-gold)";
-                  } else if (frag === "silver") {
-                    fill = SILVER_COLOR;
-                    filter = "url(#glow-silver)";
-                  } else {
-                    // not earned yet → grey fragment
-                    fill = "rgba(255, 255, 255, 0.15)";
-                    filter = undefined;
-                  }
+                  const isGold = frag === "gold";
+                  const fill = isGold ? GOLD_COLOR : SILVER_COLOR;
+                  const filter = isGold ? "url(#glow-gold)" : "url(#glow-silver)";
 
                   return (
                     <polygon
@@ -219,7 +227,7 @@ function StarStrip({ starHistory = [], accentColor }) {
                     const filled = segIndex < segmentsFilled;
 
                     if (!filled) {
-                      // empty segment: grey base star covers it
+                      // empty segment: base star covers it
                       return null;
                     }
 

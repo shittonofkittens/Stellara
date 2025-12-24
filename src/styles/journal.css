@@ -17,6 +17,7 @@
 .journal-label {
   font-size: 0.75rem;
   color: var(--text-muted);
+  text-transform: uppercase;
 }
 
 .journal-input-text,
@@ -38,6 +39,13 @@
 .journal-textarea:focus,
 .journal-button-primary:focus,
 .subcategory-tab.is-active {
+  outline: none;
+  border-color: var(--theme-glow);
+  box-shadow: 0 0 0 1px var(--theme-glow);
+}
+
+.journal-focus-toggle:focus,
+.journal-focus-toggle[aria-pressed="true"] {
   outline: none;
   border-color: var(--theme-glow);
   box-shadow: 0 0 0 1px var(--theme-glow);
@@ -148,6 +156,10 @@
   border-radius: 12px;
   padding: 0.85rem 0.95rem;
   border: 1px solid rgb(46, 46, 46);
+}
+
+.therapy-choice-text {
+  font-size: 0.8em;
 }
 
 .journal-history-header {

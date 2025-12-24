@@ -22,6 +22,101 @@
   padding-bottom: 1.5rem;
 }
 
+/* Constellations viewer */
+.constellation-stage {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  background: #000;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.constellations-shortcutbar {
+  margin-top: 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border-subtle);
+}
+
+.constellations-shortcut-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.constellations-stars-available {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.constellations-grid {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.9rem;
+}
+
+.constellation-card {
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 14px;
+  padding: 0.65rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  scroll-margin-top: 160px;
+}
+
+.constellation-card.is-selected {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.constellation-card-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #000;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.constellation-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.constellation-card-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.constellation-card-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.constellation-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 
 /* Element themes */
 .subcategory-page-air {
@@ -31,7 +126,7 @@
 }
 
 .subcategory-page-earth {
-  background: radial-gradient(circle at bottom, #9fcf70 0, #05060a 60%);
+  background: radial-gradient(circle at bottom, #557139 0, #05060a 60%);
   --theme-glow: rgba(159, 207, 112, 0.7);   /* soft green */
 }
 
