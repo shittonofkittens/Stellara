@@ -242,6 +242,15 @@ export default function MeditationReadingSubcategoryPage({ category, subcategory
   const monthlyStars = monthlyTotals.totalStars;
   const monthlyMeditationStars = monthlyTotals.meditationStars;
 
+  const monthlyFragments = useMemo(() => {
+    const list = Array.isArray(entries) ? entries : [];
+    const monthEntries = list.filter((e) => typeof e?.dateKey === "string" && e.dateKey.startsWith(monthKey));
+    const hasReading = monthEntries.some((e) => e?.kind === "reading");
+    if (hasReading) return 4;
+    const meditationCount = monthEntries.filter((e) => e?.kind === "meditation").length;
+    return Math.max(0, Math.min(4, meditationCount));
+  }, [entries, monthKey]);
+
   const meditationYearlyStars = useMemo(() => {
     const yearKey = dateKey.slice(0, 4);
     return computeMeditationYearlyStars(entries, yearKey);
@@ -655,9 +664,9 @@ export default function MeditationReadingSubcategoryPage({ category, subcategory
         </p>
       }
       onConfirmToken={confirmMeditationTokenUse}
-      monthlyFragments={monthlyMeditationStars}
+      monthlyFragments={monthlyFragments}
       yearlyFragments={meditationYearlyStars}
-      monthlyFragmentsMax={2}
+      monthlyFragmentsMax={4}
       yearlyFragmentsMax={24}
       fragmentsLogged={monthlyStars}
       entriesLogged={Array.isArray(entries) ? entries.length : 0}

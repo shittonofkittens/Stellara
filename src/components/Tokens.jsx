@@ -1,15 +1,15 @@
 // src/components/Tokens.jsx
 import { useEffect, useMemo, useState } from "react";
-import { earnTokens, getTokenBalance, readTokenLedger } from "../utils/tokens";
+import { earnTokens, getTokenBalance, readTokenLedger, writeTokenLedger } from "../utils/tokens";
 
 const SEEDED_KEY_PREFIX = "categoryTokensSeeded:";
 
-// Stub balances for testing (edit these whenever you want).
-// These seed the per-category token ledger ONCE (only if the ledger is empty).
+// Legacy stub balances (previously used to seed tokens for testing).
+// Keeping this exported for compatibility, but default is now 0 for all categories.
 export const DEFAULT_CATEGORY_TOKENS = {
-  mind: 10,
-  body: 10,
-  will: 10,
+  mind: 0,
+  body: 0,
+  will: 0,
   spirit: 10,
 };
 
@@ -27,8 +27,29 @@ export function ensureCategoryTokensSeeded(categoryId) {
   const id = String(categoryId || "");
   if (!id) return;
 
-  // Only seed if ledger is empty.
   const ledger = readTokenLedger(id);
+
+  // Mind: never seed default tokens; also remove any legacy seed-stub tokens.
+  // Body: stop seeding default tokens; remove legacy seed-stub tokens when safe.
+  // Will: stop seeding default tokens; remove legacy seed-stub tokens when safe.
+  if (id === "mind" || id === "body" || id === "will") {
+    if (!ledger.length) {
+      localStorage.removeItem(seededKey(id));
+      return;
+    }
+
+    const filtered = ledger.filter((ev) => String(ev?.source || "") !== "seed-stub");
+    if (filtered.length === ledger.length) return;
+
+    const nextBalance = filtered.reduce((sum, ev) => sum + (Number(ev?.amount) || 0), 0);
+    if (nextBalance >= 0) {
+      writeTokenLedger(id, filtered);
+      localStorage.removeItem(seededKey(id));
+    }
+    return;
+  }
+
+  // Other categories: seed once (only if ledger is empty).
   if (ledger.length > 0) return;
 
   // Avoid re-seeding if the user intentionally cleared the ledger.

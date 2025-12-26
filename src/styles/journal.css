@@ -35,9 +35,17 @@
 }
 
 .journal-input-text:focus,
+.journal-input-text:focus-visible,
 .journal-select:focus,
+.journal-select:focus-visible,
 .journal-textarea:focus,
+.journal-textarea:focus-visible,
+.journal-button-secondary:focus,
+.journal-button-secondary:focus-visible,
 .journal-button-primary:focus,
+.journal-button-primary:focus-visible,
+.subcategory-tab:focus,
+.subcategory-tab:focus-visible,
 .subcategory-tab.is-active {
   outline: none;
   border-color: var(--theme-glow);
@@ -45,10 +53,20 @@
 }
 
 .journal-focus-toggle:focus,
+.journal-focus-toggle:focus-visible,
 .journal-focus-toggle[aria-pressed="true"] {
   outline: none;
   border-color: var(--theme-glow);
   box-shadow: 0 0 0 1px var(--theme-glow);
+}
+
+.journal-button-secondary[aria-pressed="true"],
+.journal-button-primary[aria-pressed="true"] {
+  outline: none;
+  border-color: var(--theme-glow);
+  box-shadow:
+    0 0 0 1px var(--theme-glow),
+    0 0 12px var(--theme-glow);
 }
 
 .journal-textarea {

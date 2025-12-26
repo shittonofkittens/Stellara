@@ -17,13 +17,18 @@ function SubcategoryCard({
     starHistory,
   } = subcategory;
 
+  const monthlyFragments =
+    typeof subcategory?.monthlyFragments === "number" ? subcategory.monthlyFragments : null;
+
+  const monthlyFragmentsMax =
+    typeof subcategory?.monthlyFragmentsMax === "number" ? subcategory.monthlyFragmentsMax : null;
+
   const currentFragments =
     typeof subcategory?.currentFragments === "number" ? subcategory.currentFragments : 0;
 
   const isJournal = id === "journal";
 
-  const showToday = id !== "therapy" && id !== "meditation" && !isJournal;
-  const showJournalCompleteBubble = isJournal && completedToday;
+  const showCompleteBubble = id !== "therapy" && id !== "meditation" && completedToday;
 
   const handleOpenTracker = () => {
     if (typeof onOpenSubcategory === "function") {
@@ -41,36 +46,26 @@ function SubcategoryCard({
         if (e.key === "Enter" || e.key === " ") handleOpenTracker();
       }}
     >
-      {showJournalCompleteBubble && (
+      {showCompleteBubble && (
         <div
-          className="today-bubble today-bubble-complete journal-complete-bubble"
+          className="today-bubble today-bubble-complete subcategory-complete-bubble"
           style={{ backgroundColor: accentColor }}
-          aria-label="Journal completed today"
+          aria-label="Completed today"
         />
       )}
       <header className="subcategory-header">
         <div className="subcategory-title-block">
           <h3 className="subcategory-label">{label}</h3>
           <p className="subcategory-stars">
-            {isJournal
+            {typeof monthlyFragments === "number" && Number.isFinite(monthlyFragments)
+              ? typeof monthlyFragmentsMax === "number" && Number.isFinite(monthlyFragmentsMax)
+                ? `${monthlyFragments} / ${monthlyFragmentsMax} fragments`
+                : `${monthlyFragments} fragments`
+              : isJournal
               ? `${currentFragments} fragments`
               : `${currentStars} stars`}
           </p>
         </div>
-
-        {showToday && (
-          <div className="subcategory-status">
-            <div
-              className={`today-bubble ${
-                completedToday ? "today-bubble-complete" : ""
-              }`}
-              style={
-                completedToday ? { backgroundColor: accentColor } : undefined
-              }
-            />
-            <span className="today-label">Today</span>
-          </div>
-        )}
       </header>
 
       <div className="subcategory-strip-wrapper">

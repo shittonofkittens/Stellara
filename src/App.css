@@ -193,6 +193,22 @@
   align-items: flex-start;
 }
 
+.meta-item-button {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+
+.meta-item-button:focus-visible {
+  outline: 2px solid var(--glow);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .meta-label {
   font-size: 0.7rem;
   text-transform: uppercase;
@@ -298,6 +314,12 @@
 }
 
 .journal-complete-bubble {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+}
+
+.subcategory-complete-bubble {
   position: absolute;
   top: 0.65rem;
   right: 0.65rem;

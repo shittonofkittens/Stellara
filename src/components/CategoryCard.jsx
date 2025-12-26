@@ -75,7 +75,7 @@ function sumFullStarsFromSubcategories(subcategories) {
   return sum;
 }
 
-function CategoryCard({ category, onOpenSubcategory }) {
+function CategoryCard({ category, onOpenSubcategory, onOpenConstellations }) {
   const [open, setOpen] = useState(false);
 
   const {
@@ -97,6 +97,12 @@ function CategoryCard({ category, onOpenSubcategory }) {
     setOpen((prev) => !prev);
   };
 
+  const handleOpenConstellations = (e) => {
+    e?.stopPropagation?.();
+    e?.preventDefault?.();
+    onOpenConstellations?.(id);
+  };
+
   return (
     <section className={`category-card category-${id}`}>
       <button
@@ -114,10 +120,15 @@ function CategoryCard({ category, onOpenSubcategory }) {
           </div>
 
           <div className="category-meta">
-            <div className="meta-item">
+            <button
+              type="button"
+              className="meta-item meta-item-button"
+              onClick={handleOpenConstellations}
+              aria-label={`Open ${label} constellations`}
+            >
               <span className="meta-label">Stars</span>
               <span className="meta-value">{totalFullStars}</span>
-            </div>
+            </button>
             <div className="meta-item">
               <span className="meta-label">Tokens</span>
               <span className="meta-value">{tokenBalance}</span>

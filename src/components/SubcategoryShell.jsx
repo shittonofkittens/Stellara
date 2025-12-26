@@ -41,6 +41,7 @@ function SubcategoryShell({
   lowEnergyEntries,
   avgChars,
   totalStarsApprox,
+  hideDefaultTracker = false,
 }) {
   const today = new Date();
 
@@ -314,68 +315,75 @@ function SubcategoryShell({
 
         {activeTab === TAB_TRACKER && (
           <div className="subcategory-tracker-container">
-            {/* Base tracker cards */}
-            <div className="tracker-grid" style={{ marginBottom: '1rem' }}>
-              <div className="tracker-card">
-                <div className="tracker-label">Monthly Fragments</div>
-                <div className="tracker-value">
-                  {(monthlyFragments ?? 0)} / {(monthlyFragmentsMax ?? 0)}
-                </div>
-              </div>
+            {!hideDefaultTracker && (
+              <>
+                {/* Base tracker cards */}
+                <div className="tracker-grid" style={{ marginBottom: '1rem' }}>
+                  <div className="tracker-card">
+                    <div className="tracker-label">Monthly Fragments</div>
+                    <div className="tracker-value">
+                      {(monthlyFragments ?? 0)} / {(monthlyFragmentsMax ?? 0)}
+                    </div>
+                  </div>
 
-              <div className="tracker-card">
-                <div className="tracker-label">Yearly Fragments</div>
-                <div className="tracker-value">
-                  {(yearlyFragments ?? 0)} / {(yearlyFragmentsMax ?? 0)}
-                </div>
-              </div>
+                  <div className="tracker-card">
+                    <div className="tracker-label">Yearly Fragments</div>
+                    <div className="tracker-value">
+                      {(yearlyFragments ?? 0)} / {(yearlyFragmentsMax ?? 0)}
+                    </div>
+                  </div>
 
-              <div className="tracker-card">
-                <div className="tracker-label">Fragments logged</div>
-                <div className="tracker-value">
-                  {fragmentsLogged ?? 0}
-                  <span className="tracker-unit"> fragments</span>
-                </div>
-                <div className="tracker-sub">
-                  ≈ {totalStarsApprox ?? 0} stars
-                </div>
-              </div>
+                  <div className="tracker-card">
+                    <div className="tracker-label">Stars logged</div>
+                    <div className="tracker-value">
+                      {(() => {
+                        const total = Number(totalStarsApprox);
+                        if (Number.isFinite(total)) return Math.max(0, Math.floor(total));
+                        const fr = Number(fragmentsLogged);
+                        if (Number.isFinite(fr)) return Math.max(0, Math.floor(fr / 5));
+                        return 0;
+                      })()}
+                      <span className="tracker-unit"> stars</span>
+                    </div>
+                  </div>
 
-              <div className="tracker-card">
-                <div className="tracker-label">Entries logged</div>
-                <div className="tracker-value">
-                  {entriesLogged ?? 0}
-                  <span className="tracker-unit"> entries</span>
+                  <div className="tracker-card">
+                    <div className="tracker-label">Entries logged</div>
+                    <div className="tracker-value">
+                      {entriesLogged ?? 0}
+                      <span className="tracker-unit"> entries</span>
+                    </div>
+                    <div className="tracker-sub">
+                      Avg length: {avgChars ?? 0} chars
+                    </div>
+                  </div>
                 </div>
-                <div className="tracker-sub">
-                  Avg length: {avgChars ?? 0} chars
-                </div>
-              </div>
-            </div>
 
-            <div className="tracker-card" style={{ marginBottom: '1rem' }}>
-              <div className="tracker-label">Low-energy entries</div>
-              <div className="tracker-value">
-                {resolvedLowEnergyEntries ?? 0}
-                <span className="tracker-unit"> entries</span>
-              </div>
-            </div>
-
-            <div className="tracker-grid" style={{ marginBottom: '1rem' }}>
-              <div className="tracker-card">
-                <div className="tracker-label">Tokens Used</div>
-                <div className="tracker-value">
-                  {tokensUsed ?? 0}
+                <div className="tracker-card" style={{ marginBottom: '1rem' }}>
+                  <div className="tracker-label">Low-energy entries</div>
+                  <div className="tracker-value">
+                    {resolvedLowEnergyEntries ?? 0}
+                    <span className="tracker-unit"> entries</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="tracker-card">
-                <div className="tracker-label">Low-Energy Tokens</div>
-                <div className="tracker-value">
-                  {resolvedLowEnergyTokensUsed ?? 0}
+                <div className="tracker-grid" style={{ marginBottom: '1rem' }}>
+                  <div className="tracker-card">
+                    <div className="tracker-label">Tokens Used</div>
+                    <div className="tracker-value">
+                      {tokensUsed ?? 0}
+                    </div>
+                  </div>
+
+                  <div className="tracker-card">
+                    <div className="tracker-label">Low-Energy Tokens</div>
+                    <div className="tracker-value">
+                      {resolvedLowEnergyTokensUsed ?? 0}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
 
             {renderTracker && renderTracker()}
           </div>
@@ -430,50 +438,66 @@ function formatMonthYearFromKey(monthKey) {
   return `${monthNames[monthIndex]} ${yyyy}`;
 }
 
-// Default History tab (right-click + long-press edit)
-function DefaultHistoryTab({ entries = [], theme, onEditEntry, onDeleteEntry }) {
+export function GroupedHistoryTab({
+  entries = [],
+  theme,
+  onEditEntry,
+  onDeleteEntry,
+  getGroupKey,
+  formatGroupLabel,
+  sortGroupKeys,
+  defaultExpandedKey,
+}) {
   if (!entries.length) {
     return <div className="journal-history-empty">No entries logged yet for this subcategory.</div>;
   }
 
-  // Group entries by "YYYY-MM"
-  const groupsByMonth = entries.reduce((acc, entry) => {
-    if (!entry.dateKey) return acc;
-    const monthKey = entry.dateKey.slice(0, 7);
-    if (!acc[monthKey]) acc[monthKey] = [];
-    acc[monthKey].push(entry);
+  const groupFn = typeof getGroupKey === "function" ? getGroupKey : (entry) => {
+    const dk = typeof entry?.dateKey === "string" ? entry.dateKey : "";
+    return dk ? dk.slice(0, 7) : "";
+  };
+  const labelFn = typeof formatGroupLabel === "function" ? formatGroupLabel : (k) => String(k || "");
+  const sortFn = typeof sortGroupKeys === "function" ? sortGroupKeys : (a, b) => String(a).localeCompare(String(b));
+
+  const groups = entries.reduce((acc, entry) => {
+    const key = groupFn(entry);
+    if (!key) return acc;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(entry);
     return acc;
   }, {});
 
-  // Chronological: oldest month first, newest month last.
-  const monthKeys = Object.keys(groupsByMonth).sort((a, b) => a.localeCompare(b));
-  // Preserve prior UX of opening the most recent month by default.
-  const [expandedMonth, setExpandedMonth] = useState(monthKeys[monthKeys.length - 1] || null);
+  const groupKeys = Object.keys(groups).sort(sortFn);
+  const initialExpanded =
+    typeof defaultExpandedKey === "string" && defaultExpandedKey
+      ? defaultExpandedKey
+      : groupKeys[groupKeys.length - 1] || null;
+  const [expandedGroup, setExpandedGroup] = useState(initialExpanded);
 
   const themeClass = theme ? `history-theme-${theme}` : "";
 
   return (
     <div className="journal-history-list">
-      {monthKeys.map((monthKey) => {
-        const monthEntries = groupsByMonth[monthKey];
-        const isOpen = expandedMonth === monthKey;
+      {groupKeys.map((groupKey) => {
+        const groupEntries = groups[groupKey];
+        const isOpen = expandedGroup === groupKey;
 
         return (
-          <section key={monthKey} className="journal-month-group">
+          <section key={groupKey} className="journal-month-group">
             <button
               type="button"
               className={`journal-month-toggle ${isOpen ? "is-open" : ""}`}
-              onClick={() => setExpandedMonth(isOpen ? null : monthKey)}
+              onClick={() => setExpandedGroup(isOpen ? null : groupKey)}
             >
-              <span className="journal-month-label">{formatMonthYearFromKey(monthKey)}</span>
+              <span className="journal-month-label">{labelFn(groupKey)}</span>
               <span className="journal-month-count">
-                {monthEntries.length} {monthEntries.length === 1 ? "entry" : "entries"}
+                {groupEntries.length} {groupEntries.length === 1 ? "entry" : "entries"}
               </span>
             </button>
 
             {isOpen && (
               <div className="journal-month-entries">
-                {[...monthEntries]
+                {[...groupEntries]
                   .sort((a, b) => {
                     const aKey = typeof a?.dateKey === "string" ? a.dateKey : "";
                     const bKey = typeof b?.dateKey === "string" ? b.dateKey : "";
@@ -484,20 +508,38 @@ function DefaultHistoryTab({ entries = [], theme, onEditEntry, onDeleteEntry }) 
                     return String(a?.id || "").localeCompare(String(b?.id || ""));
                   })
                   .map((entry) => (
-                  <HistoryItem
-                    key={entry.id}
-                    entry={entry}
-                    themeClass={themeClass}
-                    onEditEntry={onEditEntry}
-                    onDeleteEntry={onDeleteEntry}
-                  />
-                ))}
+                    <HistoryItem
+                      key={entry.id}
+                      entry={entry}
+                      themeClass={themeClass}
+                      onEditEntry={onEditEntry}
+                      onDeleteEntry={onDeleteEntry}
+                    />
+                  ))}
               </div>
             )}
           </section>
         );
       })}
     </div>
+  );
+}
+
+// Default History tab (right-click + long-press edit)
+function DefaultHistoryTab({ entries = [], theme, onEditEntry, onDeleteEntry }) {
+  return (
+    <GroupedHistoryTab
+      entries={entries}
+      theme={theme}
+      onEditEntry={onEditEntry}
+      onDeleteEntry={onDeleteEntry}
+      getGroupKey={(entry) => {
+        const dk = typeof entry?.dateKey === "string" ? entry.dateKey : "";
+        return dk ? dk.slice(0, 7) : "";
+      }}
+      formatGroupLabel={formatMonthYearFromKey}
+      sortGroupKeys={(a, b) => String(b).localeCompare(String(a))}
+    />
   );
 }
 
@@ -524,7 +566,8 @@ function HistoryItem({ entry, themeClass, onEditEntry, onDeleteEntry }) {
   };
 
   const isToken = entry.isToken;
-  const sessionLabel = isToken ? `${capitalize(entry.timeOfDay)} Token` : capitalize(entry.timeOfDay);
+  const baseLabel = capitalize(entry.timeOfDay);
+  const sessionLabel = isToken ? (baseLabel ? `${baseLabel} Token` : "Token") : baseLabel;
   const bodyText = typeof entry?.text === "string" ? entry.text.trim() : "";
 
   return (
@@ -546,7 +589,7 @@ function HistoryItem({ entry, themeClass, onEditEntry, onDeleteEntry }) {
       <div className="journal-history-header">
         <div className="journal-history-title">{entry.title}</div>
         <div className="journal-history-meta">
-          <span className="journal-history-tag">{sessionLabel}</span>
+          {sessionLabel ? <span className="journal-history-tag">{sessionLabel}</span> : null}
           {onDeleteEntry && (
             <button
               type="button"
@@ -574,14 +617,22 @@ function HistoryItem({ entry, themeClass, onEditEntry, onDeleteEntry }) {
 
       {entry.attachments?.length > 0 && (
         <div className="journal-history-images">
-          {entry.attachments.map((src, i) => (
-            <img
-              key={i}
-              src={src}
-              alt={`attachment-${i}`}
-              className="journal-history-image"
-            />
-          ))}
+          {entry.attachments.map((att, i) => {
+            const src = typeof att === "string" ? att : String(att?.src || "");
+            if (!src) return null;
+            const alt = typeof att === "string" ? `attachment-${i}` : String(att?.alt || `attachment-${i}`);
+            const reversed = typeof att === "object" && !!att?.reversed;
+
+            return (
+              <img
+                key={`${src}-${i}`}
+                src={src}
+                alt={alt}
+                className="journal-history-image"
+                style={reversed ? { transform: "rotate(180deg)" } : undefined}
+              />
+            );
+          })}
         </div>
       )}
     </article>

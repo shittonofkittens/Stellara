@@ -1,6 +1,7 @@
 // src/components/Constellation.jsx
 import React, { useEffect, useId, useMemo, useState } from "react";
 import { earnTokens, getTokenBalance, spendTokens } from "../utils/tokens";
+import { ensureCategoryTokensSeeded } from "./Tokens";
 import ConstellationPage from "./ConstellationPage";
 
 const COMPLETION_KEY_PREFIX = "constellationCompletion:";
@@ -406,6 +407,7 @@ export default function Constellation({ category, constellations, onBack }) {
 
   useEffect(() => {
     if (!categoryId) return;
+    ensureCategoryTokensSeeded(categoryId);
     setCompletionMap(readCompletionMap(categoryId));
     setTokenBalance(getTokenBalance(categoryId));
 
