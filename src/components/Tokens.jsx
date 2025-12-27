@@ -10,7 +10,7 @@ export const DEFAULT_CATEGORY_TOKENS = {
   mind: 0,
   body: 0,
   will: 0,
-  spirit: 10,
+  spirit: 0,
 };
 
 function seededKey(categoryId) {
@@ -29,10 +29,8 @@ export function ensureCategoryTokensSeeded(categoryId) {
 
   const ledger = readTokenLedger(id);
 
-  // Mind: never seed default tokens; also remove any legacy seed-stub tokens.
-  // Body: stop seeding default tokens; remove legacy seed-stub tokens when safe.
-  // Will: stop seeding default tokens; remove legacy seed-stub tokens when safe.
-  if (id === "mind" || id === "body" || id === "will") {
+  // Core categories: never seed default tokens; also remove any legacy seed-stub tokens when safe.
+  if (id === "mind" || id === "body" || id === "will" || id === "spirit") {
     if (!ledger.length) {
       localStorage.removeItem(seededKey(id));
       return;

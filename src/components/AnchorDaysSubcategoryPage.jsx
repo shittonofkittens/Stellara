@@ -173,6 +173,7 @@ export default function AnchorDaysSubcategoryPage({ category, subcategory, onBac
     { id: "anime", label: "Watching Anime" },
     { id: "bath", label: "Bath" },
     { id: "music", label: "Music" },
+    { id: "gaming", label: "Gaming" },
     { id: "art", label: "Art" },
     { id: "other", label: "Other" },
   ];
@@ -304,6 +305,7 @@ export default function AnchorDaysSubcategoryPage({ category, subcategory, onBac
       anime: 0,
       bath: 0,
       music: 0,
+      gaming: 0,
       art: 0,
       other: 0,
     };
